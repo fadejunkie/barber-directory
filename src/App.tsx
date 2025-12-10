@@ -342,7 +342,7 @@ export default function App() {
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
 
           <main className="flex-1 w-full min-w-0">
             <header className="mb-8">
