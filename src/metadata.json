@@ -1,0 +1,7 @@
+{
+  "name": "FadeJunkie Barber School Directory - Inception",
+  "description": "A React-based barber school directory with geolocation and radius search capabilities.\n\nThe project was started here and passed all test to complete phase 1.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

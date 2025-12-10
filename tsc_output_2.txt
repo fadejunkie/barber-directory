@@ -1,0 +1,2 @@
+src/App.tsx(177,76): error TS2554: Expected 2 arguments, but got 4.
+src/App.tsx(226,66): error TS2554: Expected 2 arguments, but got 4.

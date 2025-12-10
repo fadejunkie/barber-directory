@@ -1,0 +1,3 @@
+src/App.tsx(2,8): error TS6133: 'React' is declared but its value is never read.
+src/App.tsx(4,31): error TS2307: Cannot find module '/src/utils/distance' or its corresponding type declarations.
+src/App.tsx(5,30): error TS2307: Cannot find module '/src/services/geoService' or its corresponding type declarations.
