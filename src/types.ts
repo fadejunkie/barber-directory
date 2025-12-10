@@ -12,7 +12,7 @@ export interface School {
   website: string | null;
   phone: string | null;
   _distance?: number; // Runtime calculated property
-  
+
   // Status for sorting and badges
   status: "regular" | "verified" | "featured";
 
@@ -22,6 +22,9 @@ export interface School {
   hours_required?: number;
   tuition?: string;
   description?: string;
+  rating?: number;
+  review_count?: number;
+  google_place_id?: string;
 }
 
 export interface GeocodeResult {
