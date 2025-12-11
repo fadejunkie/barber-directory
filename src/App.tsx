@@ -71,10 +71,7 @@ export default function App() {
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
 
-  // Refs for debouncing
-  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Theme Effect
+  // Theme State
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -178,7 +175,16 @@ export default function App() {
           return { ...s, _distance: dist };
         }).filter(s => s._distance !== undefined && s._distance <= effectiveRadius) as School[];
 
-        const sorted = sortSchools(withDist);
+        // Filter by text even when using location if query exists
+        const textFiltered = qLower
+          ? withDist.filter(s =>
+            s.name.toLowerCase().includes(qLower) ||
+            s.address.toLowerCase().includes(qLower) ||
+            (s.programs && s.programs.some(p => p.toLowerCase().includes(qLower)))
+          )
+          : withDist;
+
+        const sorted = sortSchools(textFiltered);
 
         setFilteredSchools(sorted);
         setMapCenter(searchUserLoc);
@@ -189,7 +195,8 @@ export default function App() {
       if (qLower) {
         const textMatches = schools.filter(s =>
           s.name.toLowerCase().includes(qLower) ||
-          s.address.toLowerCase().includes(qLower)
+          s.address.toLowerCase().includes(qLower) ||
+          (s.programs && s.programs.some(p => p.toLowerCase().includes(qLower)))
         );
 
         if (searchRadius === 0) {
@@ -253,21 +260,8 @@ export default function App() {
   }, [allSchools, loadingData]);
 
   useEffect(() => {
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-    if (!query && !userLoc) {
-      setFilteredSchools([]);
-      setMapCenter(null);
-      setStatusMessage("");
-      return;
-    }
-    debounceTimeoutRef.current = setTimeout(() => {
-      performSearch(query, radius, userLoc);
-    }, 600);
-    return () => {
-      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
-    };
+    // Immediate search for better UX
+    performSearch(query, radius, userLoc);
   }, [query, radius, userLoc, performSearch]);
 
   const handleLocationClick = () => {
@@ -468,6 +462,7 @@ export default function App() {
                   key={school.id}
                   school={school}
                   onSelect={setSelectedSchool}
+                  searchQuery={query}
                 />
               ))}
             </div>

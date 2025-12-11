@@ -5,10 +5,18 @@ import type { School } from '../types';
 interface SchoolCardProps {
   school: School;
   onSelect: (school: School) => void;
+  searchQuery?: string;
 }
 
-export const SchoolCard: React.FC<SchoolCardProps> = ({ school, onSelect }) => {
+export const SchoolCard: React.FC<SchoolCardProps> = ({ school, onSelect, searchQuery }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Auto-collapse when search query changes
+  React.useEffect(() => {
+    if (searchQuery) {
+      setIsExpanded(false);
+    }
+  }, [searchQuery]);
 
   const mapsDirHref = (address: string) =>
     "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
