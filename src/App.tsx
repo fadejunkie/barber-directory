@@ -29,8 +29,8 @@ const RADIUS_OPTIONS = [
 // AD CONFIGURATION
 const AD_CONFIG = {
   topBanner: {
-    light: "/fj-banners/fj-display-ad-light.png",
-    dark: "/fj-banners/fj-display-ad-dark.png"
+    light: "/fj-banners/top-banner-light.png",
+    dark: "/fj-banners/top-banner-dark.png"
   },
   sideColumn: {
     light: "/babyliss-tomb45-display-ad.png",
