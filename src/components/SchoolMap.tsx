@@ -11,6 +11,7 @@ interface SchoolMapProps {
 }
 
 export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLocation }) => {
+  console.log("SchoolMap Render:", { center, schools: schools.length, isUserLocation });
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
@@ -27,7 +28,7 @@ export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLoc
         scrollWheelZoom: true,
         dragging: true
       }).setView([31.9686, -99.9018], 6);
-      
+
       // Use CartoDB Positron for a clean, minimal, grayscale street map style.
       // This removes terrain shading, satellite imagery, and loud colors.
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -35,7 +36,7 @@ export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLoc
         subdomains: 'abcd',
         maxZoom: 20
       }).addTo(map);
-      
+
       mapInstanceRef.current = map;
     }
 
@@ -68,7 +69,7 @@ export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLoc
     // Add Center Marker if present
     if (center) {
       const color = isUserLocation ? '#10b981' : '#3b82f6'; // Emerald for user, Blue for search
-      
+
       const icon = L.divIcon({
         className: 'custom-center-marker',
         html: `<div style="background-color: ${color}; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.4);"></div>`,
@@ -79,7 +80,7 @@ export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLoc
       centerMarkerRef.current = L.marker([center.lat, center.lng], { icon })
         .addTo(map)
         .bindPopup(isUserLocation ? 'Your Location' : 'Search Center');
-      
+
       bounds.extend([center.lat, center.lng]);
       hasPoints = true;
     }
@@ -97,7 +98,7 @@ export const SchoolMap: React.FC<SchoolMapProps> = ({ schools, center, isUserLoc
               ${school._distance ? `<div class="mt-2 text-emerald-600 font-semibold text-xs">${school._distance.toFixed(1)} miles away</div>` : ''}
             </div>
           `);
-        
+
         markersRef.current.push(marker);
         bounds.extend([school.coords.lat, school.coords.lng]);
         hasPoints = true;

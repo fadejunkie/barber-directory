@@ -19,8 +19,10 @@ export const geocodeQuery = async (query: string): Promise<GeocodeResult | null>
     });
 
     const response = await fetch(`${NOMINATIM_BASE_URL}?${params.toString()}`);
-    
+    console.log("Geocode Response Status:", response.status);
+
     if (!response.ok) {
+      console.error("Geocode Error Body:", await response.text());
       throw new Error(`Geocoding failed: ${response.statusText}`);
     }
 
@@ -39,5 +41,42 @@ export const geocodeQuery = async (query: string): Promise<GeocodeResult | null>
   } catch (error) {
     console.error('Error during geocoding:', error);
     return null;
+  }
+};
+
+/**
+ * Fetches place suggestions for a partial query.
+ * Limits to 5 results, US only.
+ */
+export const getPlaceSuggestions = async (query: string): Promise<GeocodeResult[]> => {
+  if (!query || query.length < 3) return [];
+
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      format: 'json',
+      addressdetails: '1',
+      limit: '5',
+      countrycodes: 'us'
+    });
+
+    const response = await fetch(`${NOMINATIM_BASE_URL}?${params.toString()}`);
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+
+    if (Array.isArray(data)) {
+      return data.map((result: any) => ({
+        lat: parseFloat(result.lat),
+        lng: parseFloat(result.lon),
+        display_name: result.display_name
+      }));
+    }
+
+    return [];
+  } catch (error) {
+    console.warn('Error fetching suggestions:', error);
+    return [];
   }
 };

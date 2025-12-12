@@ -27,8 +27,17 @@ export interface School {
   google_place_id?: string;
 }
 
+
 export interface GeocodeResult {
   lat: number;
   lng: number;
   display_name: string;
+}
+
+export interface Suggestion {
+  id: string; // unique key
+  type: 'school' | 'city' | 'location';
+  label: string;
+  subLabel?: string;
+  data: School | GeocodeResult | { lat: number; lng: number }; // Payload
 }
